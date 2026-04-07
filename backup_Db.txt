@@ -1,0 +1,58 @@
+-- Create database
+CREATE DATABASE IF NOT EXISTS social_media;
+USE social_media;
+
+-- -----------------------------
+-- Table: users
+-- -----------------------------
+CREATE TABLE IF NOT EXISTS users (
+    userId INT(11) NOT NULL AUTO_INCREMENT,
+    userName VARCHAR(100) NOT NULL,
+    userPassword VARCHAR(255) NOT NULL,
+    userImage TEXT,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Sample user
+INSERT INTO users (userName, userPassword, userImage)
+VALUES ('Akter Hossain', '1', 'https://i.ibb.co.com/B5Gk3X0V/309aa20b-a945-42f7-9931-7b60bd4761d8.jpg');
+
+-- -----------------------------
+-- Table: posts
+-- -----------------------------
+CREATE TABLE IF NOT EXISTS posts (
+    postId INT(11) NOT NULL AUTO_INCREMENT,
+    postedUserId INT(11) NOT NULL,
+    postText TEXT,
+    postImageUrl TEXT,
+    postedTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (postId),
+    FOREIGN KEY (postedUserId) REFERENCES users(userId) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Sample post
+INSERT INTO posts (postedUserId, postText, postImageUrl)
+VALUES (1, 'Hello World!', NULL);
+
+-- -----------------------------
+-- Table: comments
+-- -----------------------------
+CREATE TABLE IF NOT EXISTS comments (
+    commentId INT(11) NOT NULL AUTO_INCREMENT,
+    commentOfPostId INT(11) NOT NULL,
+    commentedUserId INT(11) NOT NULL,
+    commentText TEXT,
+    commentTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (commentId),
+    FOREIGN KEY (commentOfPostId) REFERENCES posts(postId) ON DELETE CASCADE,
+    FOREIGN KEY (commentedUserId) REFERENCES users(userId) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Sample comments
+INSERT INTO comments (commentOfPostId, commentedUserId, commentText)
+VALUES 
+(1, 1, 'hi'),
+(1, 1, 'fadfadf'),
+(1, 1, 'afdafdafd'),
+(1, 1, 'adfadfafd');
